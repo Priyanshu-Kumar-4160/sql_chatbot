@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NL ➜ SQL Chatbot</title>
+  <style>
+    body{font-family:Arial;padding:20px}
+    textarea{width:100%}
+    table,th,td{border:1px solid #888;border-collapse:collapse;padding:6px}
+  </style>
+</head>
+<body>
+  <h1>Ask your database</h1>
+  <form method="post">
+    {% csrf_token %} {{ form.as_p }}
+    <button type="submit">Run</button>
+  </form>
+
+  {% if sql %}
+    <h2>Generated SQL</h2>
+    <pre>{{ sql }}</pre>
+
+    <h2>Explanation</h2>
+    <p>{{ explanation }}</p>
+
+    <h2>Results</h2>
+    {% if rows %}
+      <table>
+        <tr>{% for c in columns %}<th>{{ c }}</th>{% endfor %}</tr>
+        {% for row in rows %}
+          <tr>{% for v in row %}<td>{{ v }}</td>{% endfor %}</tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p>No rows returned.</p>
+    {% endif %}
+  {% endif %}
+</body>
+</html>
